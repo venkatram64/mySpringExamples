@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employees</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <div>
+        <a class="active" href="/">Home</a>
+        <a href="/employee">Employee</a>
+    </div>
+    <h2>Employee page</h2>
+    <h2>Welcome to <span th:text="${firstName}"></span> </h2>
+    <h2><span th:text="${lastName}"></span> </h2>
+</body>
+</html>
