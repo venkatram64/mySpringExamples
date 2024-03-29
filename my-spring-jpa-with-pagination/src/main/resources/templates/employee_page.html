@@ -6,12 +6,10 @@
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-    <div>
-        <a class="active" href="/">Home</a>
-        <a href="/employee">Employee</a>
-    </div>
+    <div th:insert="~{parts/navigation::nav}"></div>
     <h2>Employee page</h2>
     <h2>Welcome to <span th:text="${firstName}"></span> </h2>
     <h2><span th:text="${lastName}"></span> </h2>
+    <div th:insert="~{parts/footer::footer}"></div>
 </body>
 </html>

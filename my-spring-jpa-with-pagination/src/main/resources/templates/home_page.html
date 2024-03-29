@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-    <div>
-        <a class="active" href="/">Home</a>
-        <a href="/employee">Employee</a>
-    </div>
+    <div th:insert="~{parts/navigation::nav}"></div>
     <h2>Home Page</h2>
     <form method="get" action="/employee">
         <input name="firstName" type="text" placeholder="Enter First Name">
         <input name="lastName" type="text" placeholder="Enter Last Name">
         <input type="submit" value="show employees">
     </form>
+    <div th:insert="~{parts/footer::footer}"></div>
 </body>
 </html>
