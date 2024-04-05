@@ -4,6 +4,7 @@ import com.venkat.mypage.model.Employee;
 import com.venkat.mypage.service.EmployeeService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,25 +22,18 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public String getAllEmp(@RequestParam(required = false, name="firstName") String firstName,
-                            @RequestParam(required = false) String lastName, Model model,
-                            HttpServletRequest request){
+    public String getAllEmp(Model model){
+        return getPaginatedEmployees(1, model);
+    }
 
-
-
-        //get session object
-        HttpSession session = request.getSession();
-        //storing in session
-        if(firstName != null && lastName != null){
-            session.setAttribute("firstName", firstName);
-            session.setAttribute("lastName", lastName);
-        }
-        firstName = (String) session.getAttribute("firstName");
-        lastName = (String) session.getAttribute("lastName");
-        model.addAttribute("firstName", firstName);
-        model.addAttribute("lastName", lastName);
-
-        List<Employee> employees = employeeService.findAll();
+    @GetMapping("/page/{pageNo}")
+    public String getPaginatedEmployees(@PathVariable(value = "pageNo") int pageNo, Model model){
+        int pageSize = 5;
+        Page<Employee> page = employeeService.findPaginated(pageNo, pageSize);
+        List<Employee> employees = page.getContent();
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
         model.addAttribute("employees", employees);
         return "employee_page";
     }
