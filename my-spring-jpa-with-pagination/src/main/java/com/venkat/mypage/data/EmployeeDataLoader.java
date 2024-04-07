@@ -28,7 +28,7 @@ public class EmployeeDataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         logger.info("Loading Employee Data...");
-        List<Employee> employees = IntStream.rangeClosed(1, 10)
+        List<Employee> employees = IntStream.rangeClosed(1, 100)
                 .mapToObj(i -> new Employee(null,faker.name().firstName(),
                         faker.name().lastName(),
                         faker.internet().emailAddress(),

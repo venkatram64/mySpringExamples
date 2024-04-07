@@ -52,6 +52,14 @@
             <div class="col-sm-2">
                 Total Rows: [[${totalItems}]]
             </div>
+            <div class="col-sm-1">
+                <a th:if="${currentPage > 1}" th:href="@{'/employee/page/1' + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">First</a>
+                <span th:unless="${currentPage > 1}">First</span>
+            </div>
+            <div class="col-sm-1">
+                <a th:if="${currentPage > 1}" th:href="@{'/employee/page/'+ ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a>
+                <span th:unless="${currentPage > 1}">Previous</span>
+            </div>
             <div class="col-sm-2">
                 <span th:each="i: ${#numbers.sequence(1, totalPages)}">
                     <a th:if="${currentPage != i}" th:href="@{'/employee/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>

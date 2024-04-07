@@ -42,7 +42,7 @@ public class EmployeeController {
         model.addAttribute("employees", employees);
 
         model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("sortDir", sortDir);//sort direction --> ascending or decending
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc": "asc");
         return "employee_page";
     }
