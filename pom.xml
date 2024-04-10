@@ -20,6 +20,7 @@
         <module>my-h2</module>
         <module>my-spring-jpa</module>
         <module>my-spring-jpa-with-pagination</module>
+        <module>my-prod-demo-with-pagination</module>
     </modules>
 
 </project>
