@@ -137,12 +137,13 @@
         $(document).ready(function () {
               $(".btn-delete").on("click", function (e) {
                 e.preventDefault();
-                link = $(this);
+                link = $(this); //<a></a>> object
 
                 productName = link.attr("productName");
+                //attaching the href to the modal dialogue
                 $("#yesBtn").attr("href", link.attr("href"));
                 $("#confirmText").html("Do you want to delete the Product \<strong\>" + productName + "\<\/strong\>?");
-                $("#confirmModal").modal();
+                $("#confirmModal").modal();//modal dialogue is built
               });
 
               $("#btnClear").on("click", function (e) {
@@ -166,11 +167,6 @@
                 $("#pageSize").val(hiddenValue);
             });
 
-            // Form submission
-            $("#searchForm").submit(function () {
-                // Allow default form submission
-                return true;
-            });
         });
   </script>
 </body>
