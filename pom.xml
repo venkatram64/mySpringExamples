@@ -22,6 +22,7 @@
         <module>my-spring-jpa-with-pagination</module>
         <module>my-prod-demo-with-pagination</module>
         <module>standalone-app</module>
+        <module>my-post-app</module>
     </modules>
 
 </project>

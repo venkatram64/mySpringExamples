@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+    <title>Users - display with pagination</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+          integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+<body>
+    <div th:replace="fragments/header :: header"></div>
+
+    <div class="container-fluid" style="max-width: 900px; margin: 0 auto;">
+        <h2 class="text-center">Users display</h2>
+
+        <div class="my-4">
+            <form th:action="@{/users/page}" id="searchForm">
+                <div class="row d-flex">
+                    <div class="col-md-6 mt-2">
+                        <div class="search">
+                            <i class="fa fa-search"></i>
+                            <input id="keyword" type="search" name="keyword" th:value="${keyword}" class="form-control"
+                                   placeholder="Enter keyword">
+                            <button type="submit" class="btn btn-secondary">Search</button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 input-group mt-2">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="pageSize">Items per page:</label>
+                        </div>
+                        <select form="searchForm" name="pageSize" th:value="${pageSize}" class="size-select" id="pageSize">
+                            <option th:each="s: ${ {5, 10, 20, 30} }" th:value="${s}" th:text="${s}" th:selected="${s == pageSize}"></option>
+                        </select>
+                        <input type="hidden" name="hiddenPageSize" th:value="${pageSize}" id="hiddenPageSize">
+                    </div>
+                    <div class="col-md-1 mt-2">
+                        <button id="btnClear" class="btn btn-info">Clear</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div th:if="${users.size() > 0}">
+            <table class="table table-hover table-responsive-xl">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Password</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Married</th>
+                        <th scope="col">Profession</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="user : ${users}">
+                        <th scope="row">[[${user.id}]]</th>
+                        <td>[[${user.firstName}]]</td>
+                        <td>[[${user.lastName}]]</td>
+                        <td>[[${user.email}]]</td>
+                        <td>[[${user.password}]]</td>
+                        <td>[[${user.gender}]]</td>
+                        <td>[[${user.address}]]</td>
+                        <td>[[${user.married}]]</td>
+                        <td>[[${user.profession}]]</td>
+                        <td>
+                            <a th:href="@{'/users/' + ${user.id}}" title="Edit this user"
+                               class="fa-regular fa-pen-to-square icon-dark"></a>
+                            &nbsp;
+                            <a th:href="@{'/users/delete/' + ${user.id}}" th:userName="${user.firstName}" id="btnDelete"
+                               title="Delete this user" class="fa-regular fa-trash-can icon-dark btn-delete"></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:unless="${users.size() > 0}">
+            <span>No Users found!</span>
+        </div>
+        <nav aria-label="Pagination" th:if="${totalPages > 0}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                    <a th:replace="fragments/paging :: paging(1, ${pageSize}, '<<', 'First Page')"></a>
+                </li>
+                <li class="page-item font-weight-bold" th:classappend="${currentPage == 1} ? 'disabled'">
+                    <a th:replace="fragments/paging :: paging(${currentPage - 1}, ${pageSize}, 'Prev', 'Previous Page')"></a>
+                </li>
+                <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
+                    <a class="page-link" href="#">...</a>
+                </li>
+                <li class="page-item" th:classappend="${page == currentPage} ? 'active'"
+                    th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
+                    <a th:replace="fragments/paging :: paging(${page}, ${pageSize}, ${page}, 'Page ' + ${page})"></a>
+                </li>
+                <li class="page-item disabled" th:if="${currentPage + 2 < totalPages}">
+                    <a class="page-link" href="#">...</a>
+                </li>
+                <li class="page-item font-weight-bold" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                    <a th:replace="fragments/paging :: paging(${currentPage + 1}, ${pageSize}, 'Next', 'Next Page')"></a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                    <a th:replace="fragments/paging :: paging(${totalPages}, ${pageSize}, '>>', 'Last Page')"></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="modal fade text-center" id="confirmModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <span id="confirmText"></span>
+                </div>
+
+                <div class="modal-footer">
+                    <a type="button" id="yesBtn" class="btn btn-danger">Yes</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/footer :: footer"></div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+              $(".btn-delete").on("click", function (e) {
+                e.preventDefault();
+                link = $(this); //<a></a>> object
+
+                userName = link.attr("userName");
+                //attaching the href to the modal dialogue
+                $("#yesBtn").attr("href", link.attr("href"));
+                $("#confirmText").html("Do you want to delete the User \<strong\>" + userName + "\<\/strong\>?");
+                $("#confirmModal").modal();//modal dialogue is built
+              });
+
+              $("#btnClear").on("click", function (e) {
+                e.preventDefault();
+                $("#keyword").text("");
+                window.location = "[[@{/users}]]";
+              });
+
+            // Set the hidden input field value when the select value changes
+            $("#pageSize").change(function () {
+                var selectedValue = $(this).val();
+                $("#hiddenPageSize").val(selectedValue);
+
+                // Submit the form programmatically
+                $("#searchForm").submit();
+            });
+
+            // When the page loads, set the selected attribute of the options based on the value in the hidden input field
+            $(document).ready(function () {
+                var hiddenValue = $("#hiddenPageSize").val();
+                $("#pageSize").val(hiddenValue);
+            });
+
+        });
+  </script>
+</body>
+</html>

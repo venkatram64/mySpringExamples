@@ -25,7 +25,7 @@ public class MyScheduler {
     }
 
     //for weekly at 8PM on MONDAY "0 0 20 * * MON"
-    @Scheduled(cron="{cron.expression.value}")
+    @Scheduled(cron="${cron.expression.value}")
     public void job2() throws InterruptedException {
         LocalDateTime current = LocalDateTime.now();
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -35,7 +35,7 @@ public class MyScheduler {
     }
 
     //for weekly at 8PM on MONDAY "0 0 20 * * MON"
-    @Scheduled(cron="{cron.expression.value2}")
+    @Scheduled(cron="${cron.expression.value2}")
     public void job3() throws InterruptedException {
         LocalDateTime current = LocalDateTime.now();
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
